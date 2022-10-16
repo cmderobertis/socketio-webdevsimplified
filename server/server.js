@@ -60,11 +60,13 @@ io.on("connection", (socket) => {
       name: "Player 001",
       score: 0,
     })
+    io.to(hostId).emit("to-lobby", true, roomId)
   })
   socket.on("join", (room) => {
     socket.join(room)
     console.log(socket.id, "joined room", room)
     io.to(socket.id).emit("join-confirmation", hostId)
+    io.to(socket.id).emit("to-lobby", false, room)
     io.to(hostId).emit("player-joined", {
       id: socket.id,
       name: pickName(),
@@ -74,6 +76,12 @@ io.on("connection", (socket) => {
   socket.on("answer-to-server", (answer) => {
     console.log("Sending", answer.content, "to", hostId)
     io.to(hostId).emit("answer", answer)
+  })
+  socket.on("player-list-server", (players) => {
+    io.emit("player-list", players)
+  })
+  socket.on("start-round", () => {
+    io.emit("redirect", "/game")
   })
 })
 

@@ -1,13 +1,19 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
+import "./app.css"
 import { socket } from "./utils/socket"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
-root.render(<App socket={socket} />)
+root.render(
+  <BrowserRouter>
+    <App socket={socket} />
+  </BrowserRouter>
+)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

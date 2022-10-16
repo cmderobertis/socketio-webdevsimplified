@@ -15,7 +15,7 @@ let answerCount = 0
 socket.on("host-confirmation", (roomId, host) => {
   console.log("Now hosting room: " + roomId)
   sessionStorage.setItem("roomId", roomId)
-  sessionStorage.setItem("players", [host])
+  sessionStorage.setItem("players", JSON.stringify([host]))
   sessionStorage.setItem("round", 0)
   sessionStorage.setItem("responses", {})
   sessionStorage.setItem("currentGame", "")
@@ -24,12 +24,16 @@ socket.on("host-confirmation", (roomId, host) => {
 })
 socket.on("player-joined", (player) => {
   console.log("someone joined the room: " + player.name)
-  const players = sessionStorage.getItem("players")
+  const players = JSON.parse(sessionStorage.getItem("players"))
   players.push(player)
-  sessionStorage.setItem("players", players)
+  sessionStorage.setItem("players", JSON.stringify(players))
+  socket.emit(
+    "player-list-server",
+    JSON.parse(sessionStorage.getItem("players"))
+  )
 })
 socket.on("answer", (answer) => {
-  console.log("asnwer received from: " + answer.id)
+  console.log("answer received from: " + answer.id)
   if (!answer.team) {
     sessionStorage.setItem("responses", {
       ...sessionStorage.getItem("responses"),

@@ -25,7 +25,7 @@ const JoinButton = ({ socket }) => {
           <input type="submit" value="Join" />
         </form>
       )}
-      <a className="btn btn-success" href="#" onClick={handleClick}>
+      <a className="btn" href="#" onClick={handleClick}>
         Join Game
       </a>
     </div>

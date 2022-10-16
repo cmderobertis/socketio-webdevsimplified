@@ -5,9 +5,17 @@ import JoinButton from "../components/JoinButton"
 const Welcome = ({ socket }) => {
   return (
     <>
-      <h2>Welcome to the Calamari Game.</h2>
-      <HostButton socket={socket} />
-      <JoinButton socket={socket} />
+      <h2>
+        <span className="display-1 me-3 text-light">&#125;</span>Welcome to the
+        Calamari Game.
+        <span className="display-1 ms-3 text-light">&#123;</span>
+      </h2>
+      <div className="d-flex justify-content-center mt-3">
+        <div className="me-3">
+          <HostButton socket={socket} />
+        </div>
+        <JoinButton socket={socket} />
+      </div>
     </>
   )
 }
