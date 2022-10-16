@@ -1,7 +1,7 @@
 import React from "react"
-import JoinButton from "../components/JoinButton"
+import HostButton from "../components/HostButton"
 
-const Welcome = ({ socket }) => {
+const HostPage = ({ socket }) => {
   return (
     <>
       <h2>
@@ -10,10 +10,12 @@ const Welcome = ({ socket }) => {
         <span className="display-1 ms-3 text-light">&#123;</span>
       </h2>
       <div className="d-flex justify-content-center mt-3">
-        <JoinButton socket={socket} />
+        <div className="me-3">
+          <HostButton socket={socket} />
+        </div>
       </div>
     </>
   )
 }
 
-export default Welcome
+export default HostPage

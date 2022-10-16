@@ -4,27 +4,44 @@ const io = require("socket.io")(3001, {
     origin: ["http://localhost:3000", "https://admin.socket.io"],
   },
 })
+const oddGameList = [
+  "Marbles",
+  "RedLightGreenLight",
+  "Trivia2",
+  "Trivia3",
+  "ThePopularThing",
+]
+const evenGameList = ["TugOfWar"]
+
+// function getNextGame()
 
 function pickName() {
   const randNames = [
     "Player 456",
-    "Player 218",
-    "Player 101",
-    "Player 212",
     "Player 067",
-    "Player 199",
     "Motion-Sensing Girl",
     "Traitor Guard",
     "The Salesman",
     "Human Furniture",
-    "Eagle VIP",
-    "Panther VIP",
-    "Bull VIP",
-    "Lion VIP",
+    "Eagle-Masked VIP",
+    "Panther-Masked VIP",
+    "Bull-Masked VIP",
+    "Lion-Masked VIP",
     "Squid",
     "Umbrella Dalgona",
+    "Red Envelope",
+    "Blue Envelope",
     "Tyler Maxwell",
     "Cursed Coffin",
+    "Fallen Contestant",
+    "Glass Bridge",
+    "Egg and Soda",
+    "Ddukbokki",
+    "Sketchy Surgeon",
+    "Pink Bow",
+    "Shady Invitation",
+    "Money Pig",
+    "Claw Machine",
     "Square Guard",
     "Circle Guard",
     "Triangle Guard",
@@ -46,6 +63,7 @@ function generateRoomId() {
 }
 
 let hostId
+let roomId
 
 io.on("connection", (socket) => {
   console.log(socket.id, "connected")
@@ -53,29 +71,61 @@ io.on("connection", (socket) => {
   socket.on("host", (message) => {
     socket.join(socket.id)
     hostId = socket.id
-    let roomId = generateRoomId()
+    roomId = generateRoomId()
     console.log(hostId, "is", message, "in room", roomId)
-    io.to(hostId).emit("host-confirmation", roomId, {
-      id: socket.id,
-      name: "Player 001",
-      score: 0,
+    io.to(hostId).emit("host-confirmation", {
+      roomId,
+      id: hostId,
+      name: "Player 001 (Host)",
     })
-    io.to(hostId).emit("to-lobby", true, roomId)
+    io.to(hostId).emit(
+      "to-lobby",
+      true,
+      roomId,
+      "Trivia",
+      false,
+      "Player 001 (Host)"
+    )
   })
   socket.on("join", (room) => {
-    socket.join(room)
-    console.log(socket.id, "joined room", room)
-    io.to(socket.id).emit("join-confirmation", hostId)
-    io.to(socket.id).emit("to-lobby", false, room)
+    socket.join(roomId)
+    socket.join(socket.id)
+    let playerName = pickName()
+    console.log(socket.id, "joined room", roomId)
+    io.to(socket.id).emit("join-confirmation", {
+      hostId,
+      roomId,
+      id: socket.id,
+      name: playerName,
+    })
+    io.to(socket.id).emit(
+      "to-lobby",
+      false,
+      roomId,
+      "Trivia",
+      false,
+      playerName
+    )
     io.to(hostId).emit("player-joined", {
       id: socket.id,
-      name: pickName(),
-      score: 0,
+      name: playerName,
     })
   })
   socket.on("answer-to-server", (answer) => {
-    console.log("Sending", answer.content, "to", hostId)
-    io.to(hostId).emit("answer", answer)
+    console.log(socket.id, "sent", answer.content, "to", hostId)
+    // io.to(hostId).emit("answer", answer)
+    if (answer.content) {
+      io.to(socket.id).emit(
+        "to-lobby",
+        false,
+        roomId,
+        "Red Light Green Light",
+        answer.content,
+        answer.playerName
+      )
+    } else {
+      io.to(socket.id).emit("game-over")
+    }
   })
   socket.on("player-list-server", (players) => {
     io.emit("player-list", players)

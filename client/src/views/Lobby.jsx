@@ -1,6 +1,7 @@
 import React from "react"
+import HowToPlay from "../components/HowToPlay"
 
-const Lobby = ({ socket, isHost, roomId, players }) => {
+const Lobby = ({ socket, isHost, roomId, players, gameName, playerName }) => {
   const handleClick = () => {
     socket.emit("start-round")
   }
@@ -8,21 +9,33 @@ const Lobby = ({ socket, isHost, roomId, players }) => {
   // display players in lobby
   return (
     <div>
-      <h2 className="display-2">Room {roomId}</h2>
+      <h1>{gameName}</h1>
       {isHost && <p>You're the host!</p>}
       <p>waiting for other players</p>
       <strong>Players in Lobby:</strong>
       <ul>
         {players &&
           players.map((player, idx) => {
-            return <li key={idx}>{player.name}</li>
+            return player.name === playerName ? (
+              <li className="squidGreen" key={idx}>
+                {player.name + " (You)"}
+              </li>
+            ) : (
+              <li key={idx}>{player.name}</li>
+            )
           })}
       </ul>
-      {isHost && (
-        <button className="btn" onClick={handleClick}>
+      <HowToPlay gameName={gameName} />
+      {isHost ? (
+        <button className="btn mt-3" onClick={handleClick}>
           Start
         </button>
+      ) : (
+        <p className="mt-3">Waiting for host to start the game...</p>
       )}
+      <h4 className="display-2 position-absolute bottom-0 start-50 translate-middle-x">
+        Room <span className="readable">{roomId}</span>
+      </h4>
     </div>
   )
 }

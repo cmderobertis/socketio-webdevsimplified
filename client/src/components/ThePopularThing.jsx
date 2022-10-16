@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react"
-const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
+import React, { useState } from "react"
+
+const ThePopularThing = () => {
+  let answer = null
   //keep track of clicked button
   const [picked1, setPicked1] = useState(false)
   const [picked2, setPicked2] = useState(false)
   const [picked3, setPicked3] = useState(false)
   const [picked4, setPicked4] = useState(false)
-
   const handleClick = (e) => {
     e.preventDefault()
     setPicked1(false)
@@ -18,28 +18,27 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
     switch (e.target.id) {
       case "1":
         setPicked1(true)
-        setAnswer(false)
+        answer = false
         break
       case "2":
         setPicked2(true)
-        setAnswer(false)
+        answer = false
         break
       case "3":
         setPicked3(true)
-        setAnswer(true)
+        answer = true
         break
       case "4":
         setPicked4(true)
-        setAnswer(false)
+        answer = false
         break
       default:
         return
     }
   }
-
   return (
     <div className="row justify-content-center">
-      <p className="text-center">How many contestants were in Squid Game?</p>
+      <p className="text-center">What's your favorite Ninja Snack?</p>
       <div className="row row-cols-2 col-lg-4 col-md-6 col-sm-10 col-12">
         <div className="col justify-content-center d-flex">
           <button
@@ -52,7 +51,7 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
             className="btn btn-success mt-2 w-100"
             onClick={handleClick}
           >
-            453
+            Pop Tarts
           </button>
         </div>
         <div className="col justify-content-center d-flex">
@@ -66,7 +65,7 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
             className="btn btn-danger mt-2 w-100"
             onClick={handleClick}
           >
-            329
+            Granola Bars
           </button>
         </div>
         <div className="col justify-content-center d-flex">
@@ -80,7 +79,7 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
             className="btn btn-warning mt-2 w-100"
             onClick={handleClick}
           >
-            456
+            Chips
           </button>
         </div>
         <div className="col justify-content-center d-flex">
@@ -94,7 +93,7 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
             className="btn btn-info mt-2 w-100"
             onClick={handleClick}
           >
-            818
+            Digestives
           </button>
         </div>
       </div>
@@ -103,4 +102,4 @@ const Trivia = ({ socket, playerName, playerId, answer, setAnswer }) => {
   )
 }
 
-export default Trivia
+export default ThePopularThing
